@@ -1,0 +1,24 @@
+{
+	"name": "hotwheels-api",
+	"main": "src/index.js",
+	"compatibility_date": "2025-09-04",
+	"workers_dev": true,
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "hotwheels-db",
+			"database_id": "33bb3b83-9fee-4ae5-8534-df07cdeed300"
+		}
+	],
+	"r2_buckets": [
+		{
+            "binding": "PHOTOS",
+			"bucket_name": "hotwheels-photos-dev",
+            "preview_bucket_name": "hotwheels-photos-dev"			
+		}
+	],
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 0.1
+	}
+}
