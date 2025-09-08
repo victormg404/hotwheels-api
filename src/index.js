@@ -12,7 +12,7 @@ export default {
           status: 204,
           headers: {
             "Access-Control-Allow-Origin": origin,
-            "Access-Control-Allow-Methods": "POST, PUT, OPTIONS",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type",
           },
         });
@@ -36,14 +36,23 @@ export default {
         if (result.results.length === 0) {
           return new Response(JSON.stringify({ error: "Car not found" }), {
             status: 404,
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": origin,
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+            },
           });
         }
 
         return new Response(JSON.stringify(result.results[0]), {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": origin,
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Headers": "Content-Type",
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
         });
       }
 
@@ -106,6 +115,32 @@ export default {
             "Access-Control-Allow-Methods": "PUT",
             "Access-Control-Allow-Headers": "Content-Type",
           },
+        });
+      }
+
+      if (method === "GET" && path.startsWith("/getCarPhoto")) {
+        const photoUrl = url.searchParams.get("url");
+
+        if (!photoUrl) {
+          return new Response("Missing 'url' parameter", { status: 400 });
+        }
+
+        const object = await env.PHOTOS.get(photoUrl, {
+          onlyIf: request.headers,
+          range: request.headers,
+        });
+
+        if (object === null) {
+          return new Response("Object Not Found", { status: 404 });
+        }
+
+        const headers = new Headers();
+        object.writeHttpMetadata(headers);
+        headers.set("etag", object.httpEtag);
+
+        return new Response("body" in object ? object.body : undefined, {
+          status: "body" in object ? 200 : 412,
+          headers,
         });
       }
 
