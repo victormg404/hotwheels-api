@@ -125,10 +125,7 @@ export default {
           return new Response("Missing 'url' parameter", { status: 400 });
         }
 
-        const object = await env.PHOTOS.get(photoUrl, {
-          onlyIf: request.headers,
-          range: request.headers,
-        });
+        const object = await env.PHOTOS.get(photoUrl);
 
         if (object === null) {
           return new Response("Object Not Found", { status: 404 });
