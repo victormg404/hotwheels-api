@@ -103,7 +103,7 @@ export default {
         );
       }
 
-      if (method === "PUT" && path.startsWith("/cars")) {
+      /* if (method === "PUT" && path.startsWith("/cars")) {
         await env.PHOTOS.put(key, request.body, {
           onlyIf: request.headers,
           httpMetadata: request.headers,
@@ -116,7 +116,7 @@ export default {
             "Access-Control-Allow-Headers": "Content-Type",
           },
         });
-      }
+      } */
 
       if (method === "GET" && path.startsWith("/getCarPhoto")) {
         const photoUrl = url.searchParams.get("url");
